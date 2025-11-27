@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C If Statement Validator</title>
-    <<style>* {
+<style>                * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -12,7 +12,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: url('https://i.pinimg.com/originals/a4/e5/f4/a4e5f4ece45595908cf3cc137cbc2ae9.gif') center/cover no-repeat fixed;
             min-height: 100vh;
             padding: 20px;
         }
@@ -42,7 +42,7 @@
             width: 45px;
             height: 45px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #a7d8de 0%, #f2c2ce 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -62,30 +62,8 @@
             font-size: 13px;
         }
 
-        .header-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .admin-btn {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .admin-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(240, 147, 251, 0.4);
-        }
-
         .logout-btn {
-            background: #ff4757;
+            background: #f2c2ce;
             color: white;
             border: none;
             padding: 10px 25px;
@@ -97,7 +75,7 @@
         }
 
         .logout-btn:hover {
-            background: #ee5a6f;
+            background: #e6a7b7;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
         }
@@ -115,7 +93,7 @@
         }
 
         .app-title h1 {
-            color: #667eea;
+            color: #794f70;
             font-size: 32px;
             margin-bottom: 5px;
         }
@@ -127,7 +105,7 @@
 
         .divider {
             height: 2px;
-            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            background: linear-gradient(90deg, transparent, #b6cff5, transparent);
             margin: 30px 0;
         }
 
@@ -163,14 +141,14 @@
 
         .input-wrapper input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #b6cff5;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         .validate-btn {
             width: 100%;
             padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #a7d8de 0%, #f2c2ce 100%);
             color: white;
             border: none;
             border-radius: 8px;
@@ -295,7 +273,7 @@
         }
 
         .clear-history-btn {
-            background: #6c757d;
+            background: #53394e;
             color: white;
             border: none;
             padding: 8px 15px;
@@ -309,7 +287,7 @@
         .clear-history-btn:hover {
             background: #5a6268;
         }
-        </style>>
+        </style>
 </head>
 <body>
     <div class="dashboard-container">
@@ -322,10 +300,7 @@
                     <p id="userEmail">Loading...</p>
                 </div>
             </div>
-            <div class="header-buttons">
-                <button class="admin-btn" id="adminBtn" style="display: none;">Admin Panel</button>
-                <button class="logout-btn" id="logoutBtn">Logout</button>
-            </div>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
         </div>
 
         <!-- Main Content -->
@@ -386,7 +361,6 @@
         const historyList = document.getElementById('historyList');
         const clearHistoryBtn = document.getElementById('clearHistoryBtn');
         const logoutBtn = document.getElementById('logoutBtn');
-        const adminBtn = document.getElementById('adminBtn');
         const userName = document.getElementById('userName');
         const userEmail = document.getElementById('userEmail');
         const userAvatar = document.getElementById('userAvatar');
@@ -406,11 +380,6 @@
 
             currentUser = JSON.parse(loggedInUser);
             displayUserInfo();
-            
-            // Show admin button if user is admin
-            if (currentUser.isadmin) {
-                adminBtn.style.display = 'block';
-            }
         }
 
         // Display user information
@@ -542,11 +511,6 @@
             if (e.key === 'Enter') {
                 validateBtn.click();
             }
-        });
-
-        // Admin Panel button
-        adminBtn.addEventListener('click', () => {
-            window.location.href = 'admin.html';
         });
 
         // Logout functionality
