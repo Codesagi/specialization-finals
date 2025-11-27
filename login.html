@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>Welcome Back!</h1>
+            <p>Login to access your account</p>
+        </div>
+        <div class="login-body">
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage">Login Successful! ✓</div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" name="email" required placeholder="Enter your email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="loginPassword" name="password" required placeholder="Enter your password">
+                        <button type="button" class="toggle-password" id="togglePassword">👁️</button>
+                    </div>
+                </div>
+                
+                <div class="forgot-password">
+                    <a href="forgot.html" id="forgotPasswordLink">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="login-btn" id="loginBtn">Login</button>
+                
+                <div class="attempt-counter" id="attemptCounter"></div>
+            </form>
+            
+            <div class="divider">──────</div>
+            
+            <div class="register-link">
+                Don't have an account? <a href="registration.html">Register here</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+    // --- Supabase Setup ---
+    const supabaseUrl = "https://oyfxrrsmrieidoysboac.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95ZnhycnNtcmllaWRveXNib2FjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzOTg0NjUsImV4cCI6MjA3NDk3NDQ2NX0.0Nib8h1aEFFG28TPKZ6LObQNe5jrMGuUp9NBAh33ieI";
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    // --- DOM Elements ---
+    const loginForm = document.getElementById('loginForm');
+    const emailInput = document.getElementById('loginEmail');
+    const passwordInput = document.getElementById('loginPassword');
+    const togglePassword = document.getElementById('togglePassword');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+    const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+    const attemptCounter = document.getElementById('attemptCounter');
+    const loginBtn = document.getElementById('loginBtn');
+
+    let failedAttempts = 0;
+    const MAX_ATTEMPTS = 3;
+
+    // --- Toggle password visibility ---
+    togglePassword.addEventListener('click', () => {
+        const type = passwordInput.type === 'password' ? 'text' : 'password';
+        passwordInput.type = type;
+        togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+    });
+
+    // --- Login form submission ---
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+
+        // Reset visuals
+        errorMessage.classList.remove('show');
+        successMessage.classList.remove('show');
+        emailInput.classList.remove('error');
+        passwordInput.classList.remove('error');
+
+        const isValid = await validateLogin(email, password);
+
+        if (isValid) {
+        successMessage.classList.add('show');
+        failedAttempts = 0;
+        attemptCounter.textContent = '';
+        forgotPasswordLink.classList.remove('highlight');
+
+        loginBtn.disabled = true;
+        emailInput.disabled = true;
+        passwordInput.disabled = true;
+
+        // Store user session
+        const { data: userData } = await supabase
+            .from('users')
+            .select('*')
+            .eq('email', email)
+            .single();
+        
+        if (userData) {
+            localStorage.setItem('loggedInUser', JSON.stringify(userData));
+        }
+
+        setTimeout(() => {
+            window.location.href = 'validator.html';
+        }, 2000);
+        } else {
+        failedAttempts++;
+        emailInput.classList.add('error');
+        passwordInput.classList.add('error');
+
+        errorMessage.textContent = `Invalid email or password. Attempt ${failedAttempts} of ${MAX_ATTEMPTS}`;
+        errorMessage.classList.add('show');
+
+        const remaining = MAX_ATTEMPTS - failedAttempts;
+        if (remaining > 0) {
+            attemptCounter.textContent = `${remaining} attempt${remaining > 1 ? 's' : ''} remaining`;
+            if (remaining === 1) attemptCounter.classList.add('warning');
+        }
+
+        if (failedAttempts >= MAX_ATTEMPTS) {
+            forgotPasswordLink.classList.add('highlight');
+            errorMessage.textContent = 'Maximum login attempts reached. Please use "Forgot Password" to reset.';
+            attemptCounter.textContent = 'Account temporarily locked';
+            attemptCounter.classList.add('warning');
+
+            loginBtn.disabled = true;
+
+            setTimeout(() => {
+            failedAttempts = 0;
+            loginBtn.disabled = false;
+            attemptCounter.textContent = '';
+            attemptCounter.classList.remove('warning');
+            errorMessage.classList.remove('show');
+            }, 30000);
+        }
+        }
+    });
+
+    // --- Validate login using Supabase ---
+    async function validateLogin(email, password) {
+        try {
+        const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('email', email)
+            .eq('password', password)
+            .single();
+
+        if (error) {
+            console.warn('Supabase login error:', error.message);
+            return false;
+        }
+
+        return !!data;
+        } catch (err) {
+        console.error('Unexpected error:', err);
+        return false;
+        }
+    }
+
+    // --- Clear errors on input ---
+    emailInput.addEventListener('input', () => {
+        emailInput.classList.remove('error');
+        errorMessage.classList.remove('show');
+    });
+
+    passwordInput.addEventListener('input', () => {
+        passwordInput.classList.remove('error');
+        errorMessage.classList.remove('show');
+    });
+    </script>
+
+</body>
+</html>

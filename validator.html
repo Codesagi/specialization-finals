@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C If Statement Validator</title>
+    <<style>* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .user-details h3 {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+
+        .user-details p {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .admin-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(240, 147, 251, 0.4);
+        }
+
+        .logout-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #ee5a6f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+        }
+
+        .main-content {
+            background: white;
+            padding: 40px;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .app-title {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .app-title h1 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        .app-title p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            margin: 30px 0;
+        }
+
+        .validator-section {
+            margin-top: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .validate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .validate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .validate-btn:active {
+            transform: translateY(0);
+        }
+
+        .result-box {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-box.valid {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            display: block;
+        }
+
+        .result-box.invalid {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+            display: block;
+        }
+
+        .history-section {
+            margin-top: 40px;
+        }
+
+        .history-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .history-item {
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .history-item .statement {
+            flex: 1;
+            color: #333;
+        }
+
+        .history-item .badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .history-item .badge.valid {
+            background: #28a745;
+            color: white;
+        }
+
+        .history-item .badge.invalid {
+            background: #dc3545;
+            color: white;
+        }
+
+        .no-history {
+            text-align: center;
+            color: #999;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .clear-history-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .clear-history-btn:hover {
+            background: #5a6268;
+        }
+        </style>>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header with user info and logout -->
+        <div class="header">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar"></div>
+                <div class="user-details">
+                    <h3 id="userName">Loading...</h3>
+                    <p id="userEmail">Loading...</p>
+                </div>
+            </div>
+            <div class="header-buttons">
+                <button class="admin-btn" id="adminBtn" style="display: none;">Admin Panel</button>
+                <button class="logout-btn" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="app-title">
+                <h1>C If Statement Validator</h1>
+                <p>Validate your C conditional statements</p>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Validator Section -->
+            <div class="validator-section">
+                <div class="input-group">
+                    <label for="ifStatement">Enter C If Statement:</label>
+                    <div class="input-wrapper">
+                        <input 
+                            type="text" 
+                            id="ifStatement" 
+                            placeholder="e.g., if(x > 5 && y < 10)"
+                            autocomplete="off"
+                        >
+                    </div>
+                </div>
+
+                <button class="validate-btn" id="validateBtn">Validate Statement</button>
+
+                <div class="result-box" id="resultBox"></div>
+            </div>
+
+            <!-- History Section -->
+            <div class="history-section">
+                <h3>Validation History</h3>
+                <div class="history-list" id="historyList">
+                    <div class="no-history">No validation history yet</div>
+                </div>
+                <button class="clear-history-btn" id="clearHistoryBtn">Clear History</button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>By: Añonuevo & Vergara (AN32)</p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase Setup
+        const supabaseUrl = "https://oyfxrrsmrieidoysboac.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95ZnhycnNtcmllaWRveXNib2FjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzOTg0NjUsImV4cCI6MjA3NDk3NDQ2NX0.0Nib8h1aEFFG28TPKZ6LObQNe5jrMGuUp9NBAh33ieI";
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        // DOM Elements
+        const ifStatementInput = document.getElementById('ifStatement');
+        const validateBtn = document.getElementById('validateBtn');
+        const resultBox = document.getElementById('resultBox');
+        const historyList = document.getElementById('historyList');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const adminBtn = document.getElementById('adminBtn');
+        const userName = document.getElementById('userName');
+        const userEmail = document.getElementById('userEmail');
+        const userAvatar = document.getElementById('userAvatar');
+
+        let validationHistory = [];
+        let currentUser = null;
+
+        // Check if user is logged in
+        function checkAuth() {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            
+            if (!loggedInUser) {
+                alert('Please login to access the dashboard');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            currentUser = JSON.parse(loggedInUser);
+            displayUserInfo();
+            
+            // Show admin button if user is admin
+            if (currentUser.isadmin) {
+                adminBtn.style.display = 'block';
+            }
+        }
+
+        // Display user information
+        function displayUserInfo() {
+            if (currentUser) {
+                userName.textContent = currentUser.name;
+                userEmail.textContent = currentUser.email;
+                userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
+            }
+        }
+
+        // Validation function (converted from Python)
+        function validateIfStatement(s) {
+            s = s.trim();
+
+            // Must be in the form if(...)
+            if (!s.match(/^if\s*\(.+\)$/)) {
+                return "NOT Valid";
+            }
+
+            // Extract expression inside ()
+            const match = s.match(/if\s*\((.*)\)/);
+            if (!match) return "NOT Valid";
+            
+            const expr = match[1].trim();
+
+            // Allowed characters only
+            if (!expr.match(/^[A-Za-z0-9_<>!=+\-*/%&|()\s]+$/)) {
+                return "NOT Valid";
+            }
+
+            // Check parentheses match
+            const openCount = (expr.match(/\(/g) || []).length;
+            const closeCount = (expr.match(/\)/g) || []).length;
+            if (openCount !== closeCount) {
+                return "NOT Valid";
+            }
+
+            // Reject pure ++x / x++ / --x / x--
+            if (expr.match(/^\s*(\+{2}|-{2})?[A-Za-z_]\w*(\+{2}|-{2})?\s*$/)) {
+                return "NOT Valid";
+            }
+
+            // Comparison or logical operator required
+            if (!expr.match(/(==|!=|>=|<=|>|<|&&|\|\|)/)) {
+                return "NOT Valid";
+            }
+
+            // Invalid operator sequences
+            if (expr.match(/===|>>=|<<=|>==|<==|!=>|=<</)) {
+                return "NOT Valid";
+            }
+
+            return "Valid";
+        }
+
+        // Handle validation
+        validateBtn.addEventListener('click', () => {
+            const statement = ifStatementInput.value.trim();
+
+            if (!statement) {
+                alert('Please enter an if statement');
+                return;
+            }
+
+            const result = validateIfStatement(statement);
+            
+            // Display result
+            resultBox.className = 'result-box';
+            if (result === "Valid") {
+                resultBox.classList.add('valid');
+                resultBox.textContent = '✓ Valid Statement';
+            } else {
+                resultBox.classList.add('invalid');
+                resultBox.textContent = '✗ NOT Valid';
+            }
+
+            // Add to history
+            addToHistory(statement, result);
+
+            // Clear input
+            ifStatementInput.value = '';
+        });
+
+        // Add to history
+        function addToHistory(statement, result) {
+            validationHistory.unshift({
+                statement: statement,
+                result: result,
+                timestamp: new Date().toLocaleString()
+            });
+
+            // Keep only last 10 items
+            if (validationHistory.length > 10) {
+                validationHistory.pop();
+            }
+
+            displayHistory();
+        }
+
+        // Display history
+        function displayHistory() {
+            if (validationHistory.length === 0) {
+                historyList.innerHTML = '<div class="no-history">No validation history yet</div>';
+                return;
+            }
+
+            historyList.innerHTML = validationHistory.map(item => `
+                <div class="history-item">
+                    <span class="statement">${item.statement}</span>
+                    <span class="badge ${item.result === 'Valid' ? 'valid' : 'invalid'}">
+                        ${item.result}
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        // Clear history
+        clearHistoryBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to clear the validation history?')) {
+                validationHistory = [];
+                displayHistory();
+                resultBox.style.display = 'none';
+            }
+        });
+
+        // Handle Enter key press
+        ifStatementInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                validateBtn.click();
+            }
+        });
+
+        // Admin Panel button
+        adminBtn.addEventListener('click', () => {
+            window.location.href = 'admin.html';
+        });
+
+        // Logout functionality
+        logoutBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('loggedInUser');
+                alert('Logged out successfully!');
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Initialize
+        checkAuth();
+    </script>
+</body>
+</html>

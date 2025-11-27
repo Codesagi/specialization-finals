@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Form</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="form-container">
+    <h2>Registration Form</h2>
+
+    <form id="registrationForm">
+      <div class="form-group">
+        <label>Name:</label>
+        <input type="text" id="name" required>
+      </div>
+
+      <div class="form-group two-col">
+        <div>
+          <label>Course:</label>
+          <select id="course" required>
+            <option value="">Select course</option>
+            <option value="BSCS-SE">BSCS-SE</option>
+            <option value="BSIT">BSIT</option>
+            <option value="BSCE">BSCE</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Year:</label>
+          <input type="number" id="year" min="1" max="5" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Gender:</label>
+        <select id="gender" required>
+          <option value="">Select gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="hide">Prefer Not to Say</option>
+        </select>
+      </div>
+
+      <div class="form-group address-group">
+        <div>
+          <label>Region:</label>
+          <div class="input-wrapper">
+            <input type="text" id="region" list="regionList" required autocomplete="off" placeholder="Select region...">
+            <datalist id="regionList"></datalist>
+            <span class="dropdown-arrow">▼</span>
+          </div>
+        </div>
+
+        <div>
+          <label>Province:</label>
+          <div class="input-wrapper">
+            <input type="text" id="province" list="provinceList" required autocomplete="off" placeholder="Select province...">
+            <datalist id="provinceList"></datalist>
+            <span class="dropdown-arrow">▼</span>
+          </div>
+        </div>
+
+        <div>
+          <label>City/Municipality:</label>
+          <div class="input-wrapper">
+            <input type="text" id="city" list="cityList" required autocomplete="off" placeholder="Select city...">
+            <datalist id="cityList"></datalist>
+            <span class="dropdown-arrow">▼</span>
+          </div>
+        </div>
+
+        <div>
+          <label>Barangay:</label>
+          <div class="input-wrapper">
+            <input type="text" id="barangay" list="barangayList" required autocomplete="off" placeholder="Select barangay...">
+            <datalist id="barangayList"></datalist>
+            <span class="dropdown-arrow">▼</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group password-group">
+        <label>Password:</label>
+        <div class="password-wrapper">
+          <input type="password" id="password" required>
+          <button type="button" id="togglePassword">👁️</button>
+        </div>
+        <small id="passwordMsg" class="error-msg"></small>
+      </div>
+
+      <div class="form-group">
+        <label>Email:</label>
+        <input type="email" id="email" required>
+        <small id="emailMsg" class="error-msg"></small>
+      </div>
+
+      <div class="form-group">
+        <label>Contact Number:</label>
+        <input type="text" id="contact" required>
+        <small id="contactMsg" class="error-msg"></small>
+      </div>
+
+      <div class="button-group">
+        <button type="submit">Register</button>
+        <button type="reset">Clear</button>
+      </div>
+    </form>
+
+    <!-- 🔹 New Section: Login Redirect -->
+    <div class="login-redirect">
+      <p>Already have an account?</p>
+      <button onclick="window.location.href='login.html'" class="login-btn">Go to Login</button>
+    </div>
+
+    <div class="registered-users">
+      <h3>Registered Users</h3>
+      <div id="userList"></div>
+    </div>
+  </div>
+
+  <script src="script.js" defer></script>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseUrl = "https://oyfxrrsmrieidoysboac.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95ZnhycnNtcmllaWRveXNib2FjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzOTg0NjUsImV4cCI6MjA3NDk3NDQ2NX0.0Nib8h1aEFFG28TPKZ6LObQNe5jrMGuUp9NBAh33ieI";
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+  </script>
+</body>
+</html>

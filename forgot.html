@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forgot Password</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-header">
+      <h1>Reset Password</h1>
+      <p>Enter your email and new password</p>
+    </div>
+
+    <div class="login-body">
+      <div class="error-message" id="errorMessage"></div>
+      <div class="success-message" id="successMessage">Password reset successful! ✓</div>
+      
+      <form id="resetPasswordForm">
+        <div class="form-group">
+          <label for="resetEmail">Email Address</label>
+          <input type="email" id="resetEmail" name="email" required placeholder="Enter your registered email">
+        </div>
+        
+        <div class="form-group">
+          <label for="newPassword">New Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="newPassword" name="password" required placeholder="Enter new password">
+            <button type="button" class="toggle-password" id="toggleNewPassword">👁️</button>
+          </div>
+          <small id="passwordMsg" class="error-msg"></small>
+        </div>
+        
+        <div class="form-group">
+          <label for="confirmPassword">Confirm New Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm new password">
+            <button type="button" class="toggle-password" id="toggleConfirmPassword">👁️</button>
+          </div>
+        </div>
+        
+        <button type="submit" class="login-btn" id="resetBtn">Reset Password</button>
+      </form>
+      
+      <div class="divider">──────</div>
+      
+      <div class="register-link">
+        Remember your password? <a href="login.html">Back to Login</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script>
+  // --- Supabase Setup ---
+  const supabaseUrl = "https://oyfxrrsmrieidoysboac.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95ZnhycnNtcmllaWRveXNib2FjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzOTg0NjUsImV4cCI6MjA3NDk3NDQ2NX0.0Nib8h1aEFFG28TPKZ6LObQNe5jrMGuUp9NBAh33ieI";
+  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+  // --- DOM Elements ---
+  const resetPasswordForm = document.getElementById('resetPasswordForm');
+  const emailInput = document.getElementById('resetEmail');
+  const newPasswordInput = document.getElementById('newPassword');
+  const confirmPasswordInput = document.getElementById('confirmPassword');
+  const toggleNewPassword = document.getElementById('toggleNewPassword');
+  const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+  const errorMessage = document.getElementById('errorMessage');
+  const successMessage = document.getElementById('successMessage');
+  const passwordMsg = document.getElementById('passwordMsg');
+  const resetBtn = document.getElementById('resetBtn');
+
+  // --- Password strength validator ---
+  function validatePasswordStrength(password) {
+    const minLength = /.{8,}/;
+    const upperCase = /[A-Z]/;
+    const lowerCase = /[a-z]/;
+    const number = /[0-9]/;
+    const specialChar = /[!@#$%^&*(),.?":{}|<>]/;
+
+    if (!minLength.test(password)) return "Password must be at least 8 characters long";
+    if (!upperCase.test(password)) return "Password must contain at least one uppercase letter";
+    if (!lowerCase.test(password)) return "Password must contain at least one lowercase letter";
+    if (!number.test(password)) return "Password must include at least one number";
+    if (!specialChar.test(password)) return "Password must include at least one special character";
+    return "";
+  }
+
+  // --- Toggle password visibility ---
+  toggleNewPassword.addEventListener('click', () => {
+    const type = newPasswordInput.type === 'password' ? 'text' : 'password';
+    newPasswordInput.type = type;
+    toggleNewPassword.textContent = type === 'password' ? '👁️' : '🙈';
+  });
+
+  toggleConfirmPassword.addEventListener('click', () => {
+    const type = confirmPasswordInput.type === 'password' ? 'text' : 'password';
+    confirmPasswordInput.type = type;
+    toggleConfirmPassword.textContent = type === 'password' ? '👁️' : '🙈';
+  });
+
+  // --- Password strength feedback ---
+  newPasswordInput.addEventListener('input', () => {
+    const validationMessage = validatePasswordStrength(newPasswordInput.value);
+    passwordMsg.textContent = validationMessage;
+    passwordMsg.style.color = validationMessage ? "red" : "green";
+  });
+
+  // --- Reset password submission ---
+  resetPasswordForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = emailInput.value.trim();
+    const newPassword = newPasswordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    // Reset visuals
+    errorMessage.classList.remove('show');
+    successMessage.classList.remove('show');
+    emailInput.classList.remove('error');
+    newPasswordInput.classList.remove('error');
+    confirmPasswordInput.classList.remove('error');
+
+    // Validate password
+    const passwordError = validatePasswordStrength(newPassword);
+    if (passwordError) {
+      showError(passwordError);
+      newPasswordInput.classList.add('error');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      showError('Passwords do not match');
+      confirmPasswordInput.classList.add('error');
+      return;
+    }
+
+    // Disable button during process
+    resetBtn.disabled = true;
+    resetBtn.textContent = 'Resetting...';
+
+    const success = await resetPassword(email, newPassword);
+
+    if (success) {
+      successMessage.classList.add('show');
+      resetPasswordForm.reset();
+      passwordMsg.textContent = '';
+
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 2000);
+    } else {
+      resetBtn.disabled = false;
+      resetBtn.textContent = 'Reset Password';
+    }
+  });
+
+  // --- Supabase password update ---
+  async function resetPassword(email, newPassword) {
+    try {
+      const { data: userData, error: selectError } = await supabase
+        .from('users')
+        .select('id, email')
+        .eq('email', email)
+        .single();
+
+      if (selectError || !userData) {
+        showError('Email not found in our system');
+        emailInput.classList.add('error');
+        return false;
+      }
+
+      const { error: updateError } = await supabase
+        .from('users')
+        .update({ password: newPassword })
+        .eq('email', email);
+
+      if (updateError) {
+        console.error('Update error:', updateError);
+        showError('Failed to reset password. Please try again.');
+        return false;
+      }
+
+      return true;
+    } catch (err) {
+      console.error('Unexpected error:', err);
+      showError('An unexpected error occurred. Please try again.');
+      return false;
+    }
+  }
+
+  // --- Helper to show errors ---
+  function showError(message) {
+    errorMessage.textContent = message;
+    errorMessage.classList.add('show');
+  }
+
+  // --- Clear errors on input ---
+  [emailInput, newPasswordInput, confirmPasswordInput].forEach(input => {
+    input.addEventListener('input', () => {
+      input.classList.remove('error');
+      errorMessage.classList.remove('show');
+    });
+  });
+  </script>
+</body>
+</html>
