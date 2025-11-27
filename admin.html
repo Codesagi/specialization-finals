@@ -27,36 +27,23 @@
             background: white;
             padding: 20px 30px;
             border-radius: 10px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+        .header h1 {
+            color: #667eea;
+            font-size: 28px;
         }
 
-        .admin-badge {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        .back-btn {
+            background: #6c757d;
             color: white;
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .header-right {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn {
-            padding: 10px 20px;
             border: none;
+            padding: 10px 25px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 14px;
@@ -64,72 +51,54 @@
             transition: all 0.3s ease;
         }
 
-        .btn-dashboard {
-            background: #667eea;
-            color: white;
-        }
-
-        .btn-dashboard:hover {
-            background: #5568d3;
+        .back-btn:hover {
+            background: #5a6268;
             transform: translateY(-2px);
-        }
-
-        .btn-logout {
-            background: #ff4757;
-            color: white;
-        }
-
-        .btn-logout:hover {
-            background: #ee5a6f;
-            transform: translateY(-2px);
-        }
-
-        .main-content {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-
-        .page-title {
-            color: #333;
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-
-        .page-subtitle {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 30px;
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
+            background: white;
+            padding: 25px;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
         }
 
         .stat-card h3 {
-            font-size: 32px;
-            margin-bottom: 5px;
-        }
-
-        .stat-card p {
+            color: #666;
             font-size: 14px;
-            opacity: 0.9;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .users-section {
-            margin-top: 30px;
+        .stat-card .number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-card.positive .number {
+            color: #28a745;
+        }
+
+        .stat-card.negative .number {
+            color: #dc3545;
+        }
+
+        .feedback-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
 
         .section-header {
@@ -141,201 +110,171 @@
 
         .section-header h2 {
             color: #333;
-            font-size: 22px;
+            font-size: 24px;
         }
 
-        .search-box {
-            padding: 10px 15px;
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
             border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            width: 300px;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
 
-        .search-box:focus {
-            outline: none;
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             border-color: #667eea;
         }
 
-        .users-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+        .filter-btn:hover:not(.active) {
+            background: #f5f5f5;
         }
 
-        .users-table thead {
+        .feedback-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .feedback-item {
             background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
         }
 
-        .users-table th {
-            padding: 15px;
-            text-align: left;
+        .feedback-item.positive {
+            border-left-color: #28a745;
+        }
+
+        .feedback-item.negative {
+            border-left-color: #dc3545;
+        }
+
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .feedback-user {
             font-weight: 600;
             color: #333;
-            border-bottom: 2px solid #e0e0e0;
         }
 
-        .users-table td {
-            padding: 15px;
-            border-bottom: 1px solid #e0e0e0;
+        .feedback-email {
             color: #666;
+            font-size: 13px;
         }
 
-        .users-table tr:hover {
-            background: #f8f9fa;
-        }
-
-        .admin-toggle {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-
-        .admin-toggle input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: #667eea;
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-
-        .badge {
-            padding: 4px 10px;
+        .feedback-badge {
+            padding: 4px 12px;
             border-radius: 12px;
             font-size: 12px;
             font-weight: 600;
         }
 
-        .badge-admin {
-            background: #667eea;
-            color: white;
+        .feedback-badge.positive {
+            background: #d4edda;
+            color: #155724;
         }
 
-        .badge-user {
-            background: #e0e0e0;
-            color: #666;
+        .feedback-badge.negative {
+            background: #f8d7da;
+            color: #721c24;
         }
 
-        .btn-delete {
-            background: #ff4757;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 5px;
-            cursor: pointer;
+        .feedback-text {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .feedback-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             font-size: 12px;
-            transition: all 0.3s ease;
+            color: #999;
         }
 
-        .btn-delete:hover {
-            background: #ee5a6f;
+        .no-feedback {
+            text-align: center;
+            color: #999;
+            padding: 40px;
+            font-style: italic;
         }
 
         .loading {
             text-align: center;
             padding: 40px;
-            color: #666;
+            color: #667eea;
+            font-size: 18px;
         }
 
-        .no-users {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-            font-style: italic;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
     <div class="admin-container">
         <div class="header">
-            <div class="header-left">
-                <h2 style="color: #667eea;">Admin Panel</h2>
-                <span class="admin-badge">ADMIN</span>
+            <h1>📊 Admin Dashboard</h1>
+            <button class="back-btn" id="backBtn">← Back to Validator</button>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Feedback</h3>
+                <div class="number" id="totalFeedback">0</div>
             </div>
-            <div class="header-right">
-                <button class="btn btn-dashboard" onclick="window.location.href='validator.html'">
-                    Back to Dashboard
-                </button>
-                <button class="btn btn-logout" id="logoutBtn">Logout</button>
+            <div class="stat-card positive">
+                <h3>Positive Feedback</h3>
+                <div class="number" id="positiveFeedback">0</div>
+            </div>
+            <div class="stat-card negative">
+                <h3>Negative Feedback</h3>
+                <div class="number" id="negativeFeedback">0</div>
             </div>
         </div>
 
-        <div class="main-content">
-            <h1 class="page-title">User Management</h1>
-            <p class="page-subtitle">Manage all registered users and their admin privileges</p>
-
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3 id="totalUsers">0</h3>
-                    <p>Total Users</p>
-                </div>
-                <div class="stat-card">
-                    <h3 id="totalAdmins">0</h3>
-                    <p>Admin Users</p>
-                </div>
-                <div class="stat-card">
-                    <h3 id="regularUsers">0</h3>
-                    <p>Regular Users</p>
+        <div class="feedback-section">
+            <div class="section-header">
+                <h2>User Feedback</h2>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="positive">Positive</button>
+                    <button class="filter-btn" data-filter="negative">Negative</button>
                 </div>
             </div>
 
-            <div class="users-section">
-                <div class="section-header">
-                    <h2>All Users</h2>
-                    <input type="text" class="search-box" id="searchBox" placeholder="Search by name or email...">
-                </div>
-
-                <div id="loadingDiv" class="loading">Loading users...</div>
-
-                <table class="users-table" id="usersTable" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Course</th>
-                            <th>Year</th>
-                            <th>Admin Status</th>
-                            <th>Toggle Admin</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="usersTableBody">
-                    </tbody>
-                </table>
-
-                <div id="noUsersDiv" class="no-users" style="display: none;">
-                    No users found
+            <div class="feedback-list" id="feedbackList">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <div>Loading feedback...</div>
                 </div>
             </div>
         </div>
@@ -347,165 +286,161 @@
         const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95ZnhycnNtcmllaWRveXNib2FjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzOTg0NjUsImV4cCI6MjA3NDk3NDQ2NX0.0Nib8h1aEFFG28TPKZ6LObQNe5jrMGuUp9NBAh33ieI";
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        let allUsers = [];
+        const backBtn = document.getElementById('backBtn');
+        const feedbackList = document.getElementById('feedbackList');
+        const totalFeedbackEl = document.getElementById('totalFeedback');
+        const positiveFeedbackEl = document.getElementById('positiveFeedback');
+        const negativeFeedbackEl = document.getElementById('negativeFeedback');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        let allFeedback = [];
+        let currentFilter = 'all';
 
         // Check if user is admin
-        async function checkAdminAccess() {
+        function checkAdmin() {
             const loggedInUser = localStorage.getItem('loggedInUser');
             
             if (!loggedInUser) {
                 alert('Please login to access the admin panel');
                 window.location.href = 'login.html';
-                return;
+                return false;
             }
 
             const user = JSON.parse(loggedInUser);
-            
-            // Check if user has admin privileges
             if (!user.isadmin) {
-                alert('Access Denied: Admin privileges required');
+                alert('Access denied. Admin privileges required.');
                 window.location.href = 'validator.html';
-                return;
+                return false;
             }
+
+            return true;
         }
 
-        // Load all users
-        async function loadUsers() {
+        // Simple sentiment analysis
+        function analyzeSentiment(text) {
+            const lowerText = text.toLowerCase();
+            
+            const positiveWords = [
+                'good', 'great', 'excellent', 'amazing', 'awesome', 'love', 'perfect',
+                'helpful', 'useful', 'easy', 'nice', 'wonderful', 'fantastic', 'best',
+                'appreciate', 'thanks', 'thank', 'like', 'enjoy', 'impressed'
+            ];
+            
+            const negativeWords = [
+                'bad', 'poor', 'terrible', 'awful', 'hate', 'worst', 'horrible',
+                'difficult', 'hard', 'confusing', 'frustrating', 'disappointed', 'useless',
+                'slow', 'bug', 'error', 'problem', 'issue', 'broken', 'fail'
+            ];
+
+            let positiveScore = 0;
+            let negativeScore = 0;
+
+            positiveWords.forEach(word => {
+                if (lowerText.includes(word)) positiveScore++;
+            });
+
+            negativeWords.forEach(word => {
+                if (lowerText.includes(word)) negativeScore++;
+            });
+
+            if (positiveScore > negativeScore) return 'positive';
+            if (negativeScore > positiveScore) return 'negative';
+            return positiveScore > 0 ? 'positive' : 'negative';
+        }
+
+        // Load feedback from database
+        async function loadFeedback() {
             try {
                 const { data, error } = await supabase
-                    .from('users')
+                    .from('feedback')
                     .select('*')
-                    .order('name', { ascending: true });
+                    .order('created_at', { ascending: false });
 
                 if (error) throw error;
 
-                allUsers = data || [];
-                displayUsers(allUsers);
-                updateStats(allUsers);
+                allFeedback = data.map(item => ({
+                    ...item,
+                    sentiment: analyzeSentiment(item.feedback_text)
+                }));
+
+                updateStats();
+                displayFeedback();
+
             } catch (error) {
-                console.error('Error loading users:', error);
-                document.getElementById('loadingDiv').textContent = 'Error loading users';
+                console.error('Error loading feedback:', error);
+                feedbackList.innerHTML = `
+                    <div class="no-feedback">
+                        Failed to load feedback. Please try again.
+                    </div>
+                `;
             }
-        }
-
-        // Display users in table
-        function displayUsers(users) {
-            const loadingDiv = document.getElementById('loadingDiv');
-            const usersTable = document.getElementById('usersTable');
-            const noUsersDiv = document.getElementById('noUsersDiv');
-            const tbody = document.getElementById('usersTableBody');
-
-            loadingDiv.style.display = 'none';
-
-            if (users.length === 0) {
-                usersTable.style.display = 'none';
-                noUsersDiv.style.display = 'block';
-                return;
-            }
-
-            usersTable.style.display = 'table';
-            noUsersDiv.style.display = 'none';
-
-            tbody.innerHTML = users.map(user => `
-                <tr>
-                    <td>${user.name}</td>
-                    <td>${user.email}</td>
-                    <td>${user.course || 'N/A'}</td>
-                    <td>${user.year || 'N/A'}</td>
-                    <td>
-                        <span class="badge ${user.isadmin ? 'badge-admin' : 'badge-user'}">
-                            ${user.isadmin ? 'Admin' : 'User'}
-                        </span>
-                    </td>
-                    <td>
-                        <label class="admin-toggle">
-                            <input type="checkbox" ${user.isadmin ? 'checked' : ''} 
-                                   onchange="toggleAdmin(${user.id}, this.checked)">
-                            <span class="slider"></span>
-                        </label>
-                    </td>
-                    <td>
-                        <button class="btn-delete" onclick="deleteUser(${user.id}, '${user.name}')">
-                            Delete
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
         }
 
         // Update statistics
-        function updateStats(users) {
-            const total = users.length;
-            const admins = users.filter(u => u.isadmin).length;
-            const regular = total - admins;
+        function updateStats() {
+            const total = allFeedback.length;
+            const positive = allFeedback.filter(f => f.sentiment === 'positive').length;
+            const negative = allFeedback.filter(f => f.sentiment === 'negative').length;
 
-            document.getElementById('totalUsers').textContent = total;
-            document.getElementById('totalAdmins').textContent = admins;
-            document.getElementById('regularUsers').textContent = regular;
+            totalFeedbackEl.textContent = total;
+            positiveFeedbackEl.textContent = positive;
+            negativeFeedbackEl.textContent = negative;
         }
 
-        // Toggle admin status
-        async function toggleAdmin(userId, isAdmin) {
-            try {
-                const { error } = await supabase
-                    .from('users')
-                    .update({ isadmin: isAdmin })
-                    .eq('id', userId);
+        // Display feedback
+        function displayFeedback() {
+            let filteredFeedback = allFeedback;
 
-                if (error) throw error;
-
-                alert(`Admin status ${isAdmin ? 'granted' : 'revoked'} successfully`);
-                loadUsers();
-            } catch (error) {
-                console.error('Error toggling admin:', error);
-                alert('Failed to update admin status');
-                loadUsers();
+            if (currentFilter !== 'all') {
+                filteredFeedback = allFeedback.filter(f => f.sentiment === currentFilter);
             }
-        }
 
-        // Delete user
-        async function deleteUser(userId, userName) {
-            if (!confirm(`Are you sure you want to delete user "${userName}"?`)) {
+            if (filteredFeedback.length === 0) {
+                feedbackList.innerHTML = `
+                    <div class="no-feedback">
+                        ${currentFilter === 'all' ? 'No feedback received yet' : `No ${currentFilter} feedback found`}
+                    </div>
+                `;
                 return;
             }
 
-            try {
-                const { error } = await supabase
-                    .from('users')
-                    .delete()
-                    .eq('id', userId);
-
-                if (error) throw error;
-
-                alert('User deleted successfully');
-                loadUsers();
-            } catch (error) {
-                console.error('Error deleting user:', error);
-                alert('Failed to delete user');
-            }
+            feedbackList.innerHTML = filteredFeedback.map(item => `
+                <div class="feedback-item ${item.sentiment}">
+                    <div class="feedback-header">
+                        <div>
+                            <div class="feedback-user">${item.user_name}</div>
+                            <div class="feedback-email">${item.user_email}</div>
+                        </div>
+                        <span class="feedback-badge ${item.sentiment}">
+                            ${item.sentiment === 'positive' ? '😊 Positive' : '😟 Negative'}
+                        </span>
+                    </div>
+                    <div class="feedback-text">${item.feedback_text}</div>
+                    <div class="feedback-footer">
+                        <span>${new Date(item.created_at).toLocaleString()}</span>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        // Search functionality
-        document.getElementById('searchBox').addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const filteredUsers = allUsers.filter(user => 
-                user.name.toLowerCase().includes(searchTerm) ||
-                user.email.toLowerCase().includes(searchTerm)
-            );
-            displayUsers(filteredUsers);
+        // Filter buttons
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                displayFeedback();
+            });
         });
 
-        // Logout
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            if (confirm('Are you sure you want to logout?')) {
-                localStorage.removeItem('loggedInUser');
-                window.location.href = 'login.html';
-            }
+        backBtn.addEventListener('click', () => {
+            window.location.href = 'validator.html';
         });
 
         // Initialize
-        checkAdminAccess();
-        loadUsers();
+        if (checkAdmin()) {
+            loadFeedback();
+        }
     </script>
 </body>
 </html>

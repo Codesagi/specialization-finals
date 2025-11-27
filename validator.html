@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C If Statement Validator</title>
-<style>                * {
+<style>
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -60,6 +61,28 @@
         .user-details p {
             color: #666;
             font-size: 13px;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .admin-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
 
         .logout-btn {
@@ -287,11 +310,98 @@
         .clear-history-btn:hover {
             background: #5a6268;
         }
-        </style>
+
+        /* Feedback Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-content h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .modal-content p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn.feedback {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .modal-btn.feedback:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .modal-btn.logout {
+            background: #6c757d;
+            color: white;
+        }
+
+        .modal-btn.logout:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+</style>
 </head>
 <body>
     <div class="dashboard-container">
-        <!-- Header with user info and logout -->
+        <!-- Header with user info and buttons -->
         <div class="header">
             <div class="user-info">
                 <div class="user-avatar" id="userAvatar"></div>
@@ -300,7 +410,10 @@
                     <p id="userEmail">Loading...</p>
                 </div>
             </div>
-            <button class="logout-btn" id="logoutBtn">Logout</button>
+            <div class="header-buttons">
+                <button class="admin-btn" id="adminBtn" style="display: none;">📊 Admin Panel</button>
+                <button class="logout-btn" id="logoutBtn">Logout</button>
+            </div>
         </div>
 
         <!-- Main Content -->
@@ -347,6 +460,18 @@
         </div>
     </div>
 
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" class="modal">
+        <div class="modal-content">
+            <h2>Before you go...</h2>
+            <p>Would you like to share your feedback about this validator?</p>
+            <div class="modal-buttons">
+                <button class="modal-btn feedback" id="giveFeedbackBtn">💬 Give Feedback</button>
+                <button class="modal-btn logout" id="logoutNowBtn">Logout Now</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
         // Supabase Setup
@@ -361,9 +486,13 @@
         const historyList = document.getElementById('historyList');
         const clearHistoryBtn = document.getElementById('clearHistoryBtn');
         const logoutBtn = document.getElementById('logoutBtn');
+        const adminBtn = document.getElementById('adminBtn');
         const userName = document.getElementById('userName');
         const userEmail = document.getElementById('userEmail');
         const userAvatar = document.getElementById('userAvatar');
+        const feedbackModal = document.getElementById('feedbackModal');
+        const giveFeedbackBtn = document.getElementById('giveFeedbackBtn');
+        const logoutNowBtn = document.getElementById('logoutNowBtn');
 
         let validationHistory = [];
         let currentUser = null;
@@ -388,47 +517,45 @@
                 userName.textContent = currentUser.name;
                 userEmail.textContent = currentUser.email;
                 userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
+                
+                // Show admin button if user is admin
+                if (currentUser.isadmin) {
+                    adminBtn.style.display = 'block';
+                }
             }
         }
 
-        // Validation function (converted from Python)
+        // Validation function
         function validateIfStatement(s) {
             s = s.trim();
 
-            // Must be in the form if(...)
             if (!s.match(/^if\s*\(.+\)$/)) {
                 return "NOT Valid";
             }
 
-            // Extract expression inside ()
             const match = s.match(/if\s*\((.*)\)/);
             if (!match) return "NOT Valid";
             
             const expr = match[1].trim();
 
-            // Allowed characters only
             if (!expr.match(/^[A-Za-z0-9_<>!=+\-*/%&|()\s]+$/)) {
                 return "NOT Valid";
             }
 
-            // Check parentheses match
             const openCount = (expr.match(/\(/g) || []).length;
             const closeCount = (expr.match(/\)/g) || []).length;
             if (openCount !== closeCount) {
                 return "NOT Valid";
             }
 
-            // Reject pure ++x / x++ / --x / x--
             if (expr.match(/^\s*(\+{2}|-{2})?[A-Za-z_]\w*(\+{2}|-{2})?\s*$/)) {
                 return "NOT Valid";
             }
 
-            // Comparison or logical operator required
             if (!expr.match(/(==|!=|>=|<=|>|<|&&|\|\|)/)) {
                 return "NOT Valid";
             }
 
-            // Invalid operator sequences
             if (expr.match(/===|>>=|<<=|>==|<==|!=>|=<</)) {
                 return "NOT Valid";
             }
@@ -447,7 +574,6 @@
 
             const result = validateIfStatement(statement);
             
-            // Display result
             resultBox.className = 'result-box';
             if (result === "Valid") {
                 resultBox.classList.add('valid');
@@ -457,10 +583,7 @@
                 resultBox.textContent = '✗ NOT Valid';
             }
 
-            // Add to history
             addToHistory(statement, result);
-
-            // Clear input
             ifStatementInput.value = '';
         });
 
@@ -472,7 +595,6 @@
                 timestamp: new Date().toLocaleString()
             });
 
-            // Keep only last 10 items
             if (validationHistory.length > 10) {
                 validationHistory.pop();
             }
@@ -506,19 +628,45 @@
             }
         });
 
-        // Handle Enter key press
+        // Handle Enter key
         ifStatementInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 validateBtn.click();
             }
         });
 
-        // Logout functionality
+        // Admin panel button
+        adminBtn.addEventListener('click', () => {
+            window.location.href = 'admin.html';
+        });
+
+        // Logout functionality with feedback modal
         logoutBtn.addEventListener('click', () => {
-            if (confirm('Are you sure you want to logout?')) {
-                localStorage.removeItem('loggedInUser');
-                alert('Logged out successfully!');
-                window.location.href = 'login.html';
+            feedbackModal.style.display = 'block';
+        });
+
+        // Give feedback button
+        giveFeedbackBtn.addEventListener('click', () => {
+            feedbackModal.style.display = 'none';
+            window.location.href = 'feedback.html';
+        });
+
+        // Logout now button
+        logoutNowBtn.addEventListener('click', () => {
+            performLogout();
+        });
+
+        // Perform logout
+        function performLogout() {
+            localStorage.removeItem('loggedInUser');
+            alert('Logged out successfully!');
+            window.location.href = 'login.html';
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === feedbackModal) {
+                feedbackModal.style.display = 'none';
             }
         });
 

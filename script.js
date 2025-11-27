@@ -185,7 +185,7 @@ form.addEventListener('submit', async (e) => {
   localStorage.setItem('loggedInUser', JSON.stringify(user));
 
   setTimeout(() => {
-      window.location.href = 'validator.html';
+      window.location.href = 'login.html';
   }, 1500);
 
   displayUsers();
